@@ -11,29 +11,33 @@ class BasicBlock(Sprite):
         self.image.fill(color)
         self.image.convert()
 
+        if not name.endswith(".none"):
+            self.name = name
+            self.image = pygame.image.load("./minigames/img/build_a_network/{}.png".format(name))
+            self.image.convert()
+        else:
+            self.name = name.split(".")[0]
+
         self.rect = self.image.get_rect()
         self.rect.x = startx
         self.rect.y = starty
 
-        self.name = name
-
 
 class DraggableBlock(BasicBlock):
-    def __init__(self, startx, starty, name, color=(255, 0, 0), img=None):
+    def __init__(self, startx, starty, name, color=(255, 0, 0)):
         super(DraggableBlock, self).__init__(
             color=color,
             startx=startx,
             starty=starty,
             name=name,
-            width=80,
-            height=80
+            width=128,
+            height=128
         )
-        # self.image = pygame.image.load("player.png").convert()
 
 
 class SelectableAndDraggableBlock(DraggableBlock):
-    def __init__(self, startx, starty, name, color=(255, 165, 0), img=None):
-        super(SelectableAndDraggableBlock, self).__init__(startx, starty, name, color=color, img=img)
+    def __init__(self, startx, starty, name, color=(255, 165, 0)):
+        super(SelectableAndDraggableBlock, self).__init__(startx, starty, name, color=color)
         self.joined_to = None
 
     def join_to(self, other_block):
@@ -48,7 +52,7 @@ class SelectableAndDraggableBlock(DraggableBlock):
 
 
 class ClickableBlock(BasicBlock):
-    def __init__(self, startx, starty, width, height, name, on_click, img=None):
+    def __init__(self, startx, starty, width, height, name, on_click):
         super(ClickableBlock, self).__init__(
             color=(0, 120, 120),
             startx=startx,

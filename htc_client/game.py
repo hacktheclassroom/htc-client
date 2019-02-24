@@ -21,12 +21,13 @@ def run_game(player, surface, font, clock):
     for m in mg_names:
         mod = importlib.import_module('minigames.{}'.format(m))
         points = mod.POINTS
+        name = mod.NAME
         m_x, m_y = 10+x, 10+y
         minigames[m] = {
             'x': m_x,
             'y': m_y,
             'rect': pygame.Rect(m_x, m_y, 246, 200), # 256-10 ;)
-            'text': font.render('{} - {}'.format(m, points), False, (255, 255, 255)),
+            'text': font.render('{}'.format(name), False, (255, 255, 255)),
             'color': [90, 69, 0],
             'img': pygame.image.load(mod.IMG)
         }

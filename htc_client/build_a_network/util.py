@@ -74,7 +74,7 @@ class Puzzle(object):
         for x in range(0, cols):
             for y in range(startrow, rows):
                 cls, name = block_queue.pop()
-                block = cls(x * 100 + 20, y * 100 + 20, name)
+                block = cls(x * 128 + 20, y * 128 + 20, name)
                 draggable_blocks.add(block)
                 if isinstance(block, SelectableAndDraggableBlock):
                     snd_blocks.add(block)

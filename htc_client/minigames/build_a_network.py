@@ -15,12 +15,12 @@ import random
 
 NAME = 'Network Builder'
 POINTS = 300
-IMG = './minigames/img/phishing.png'
+IMG = './minigames/img/build_a_network/icon.png'
 
 PUZZLES = {
     "puzzle1": {
-        "snd_blocks": ["firewall", "router"],
-        "draggable_blocks": ["database", "webserver"]
+        "snd_blocks": ["firewall", "router", "database", "server"],
+        "draggable_blocks": []
     }
 }
 
@@ -63,10 +63,11 @@ def main(player, surface, font, clock):
     snd_blocks = blockgroups["snd_blockgroup"]
 
     all_blocks = [
+        clickable_blocks,
         basic_blocks,
         draggable_blocks,
-        snd_blocks,
-        clickable_blocks
+        snd_blocks
+
     ]
 
     picked_up = None
@@ -74,7 +75,8 @@ def main(player, surface, font, clock):
 
     draw_line = False
     internet = BasicBlock((120, 0, 120), int(WIDTH*2/3) - 20, 20, int(WIDTH/3), 150, "internet")
-    dmz = BasicBlock((0, 255, 0), int(WIDTH*2/3) - 20, 200, int(WIDTH/3), 200, "dmz")
+    dmz = BasicBlock((0, 255, 0), int(WIDTH*2/3) - 20, 350, int(WIDTH/3), 200, "dmz")
+    bg = Background('./minigames/img/build_a_network/bground.png', [0, 0])
 
     basic_blocks.add(dmz)
     basic_blocks.add(internet)
@@ -82,11 +84,16 @@ def main(player, surface, font, clock):
     parser = BlockParser(all_blocks)
     tracker = RunTracker(parser)
 
-    clickable_blocks.add(ClickableBlock(250, 250, 80, 40, "check_block", tracker.finish))
+    clickable_blocks.add(ClickableBlock(int(WIDTH/2-460), HEIGHT-165, 80, 40, "submit", tracker.finish))
 
     while not tracker.done:
         clock.tick(60)
-        surface.fill([0, 0, 255])
+
+        # surface.blit(bg.image, bg.rect)
+        surface.fill([255, 255, 255])
+
+        for blockgroup in all_blocks:
+            blockgroup.draw(surface)
 
         if draw_line and selected:
             pygame.draw.line(surface, (0, 0, 0), (selected.rect.x + selected.rect.width/2, selected.rect.y + selected.rect.height/2),
@@ -95,8 +102,7 @@ def main(player, surface, font, clock):
         for block in snd_blocks:
             block.draw_line(surface)
 
-        for blockgroup in all_blocks:
-            blockgroup.draw(surface)
+
 
         events = pygame.event.get()
         for event in events:
