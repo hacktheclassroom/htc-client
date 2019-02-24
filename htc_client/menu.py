@@ -98,7 +98,7 @@ def run_menu(surface, font, clock):
         surface.blit(start_text, (600, 445))
         surface.blit(title_text, (490, 100))
 
-        surface.blit(logo, (0, 0))
+        surface.blit(logo, (50, 50))
 
         # TODO: This doesn't work...?
         if display_error:

@@ -9,4 +9,4 @@ class Player:
     def __init__(self, username, server_code):
         self.username = username
         self.server_code = server_code
-        self.client = Client(self.username, self.server_code)
+        self.client = Client(self.username, self.server_code, url='http://localhost')
