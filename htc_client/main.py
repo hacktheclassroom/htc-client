@@ -5,6 +5,8 @@
 import pygame
 from pygame.locals import *
 
+from importlib import import_module
+
 from menu import run_menu
 from game import run_game
 
@@ -29,10 +31,13 @@ def main():
     player = run_menu(surface, font, clock)
 
     while True:
-        minigame = run_game(surface, font, clock)
-        print(minigame)
-        # some importlib magichere :)
-        # minigame(surface, font, clock)
+        minigame_name = run_game(surface, font, clock)
+
+        # run a minigame
+        module = import_module('minigames.{}'.format(minigame_name))
+        minigame = getattr(module, 'main')
+        minigame(surface, font, clock)
+
 
 if __name__ == '__main__':
     main()

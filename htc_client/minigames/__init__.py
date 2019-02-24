@@ -1,1 +1,1 @@
-"""htc_client.minigames"
+"""htc_client.minigames"""
