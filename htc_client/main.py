@@ -21,11 +21,7 @@ pygame.font.init()
 surface = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption('Hack The Classroom')
 clock = pygame.time.Clock()
-
-# TODO: Fix font
 font = pygame.font.Font('./font.ttf', 32)
-# font = pygame.font.SysFont('Arial', 36)
-
 
 def main():
     player = run_menu(surface, font, clock)
