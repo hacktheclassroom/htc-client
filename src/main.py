@@ -10,7 +10,6 @@ import pygameMenu
 from pygame.locals import *
 from pygameMenu.locals import *
 
-
 # globals
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
@@ -21,7 +20,13 @@ WINDOW_SIZE = (WIDTH, HEIGHT)
 MENU_FONT_SIZE = 36
 MENU_ALPHA = 100
 
+# init pygame
 pygame.init()
+pygame.font.init()
+
+# TODO: Fix font
+# myfont = pygame.font.Font('./font.ttf', 36)
+myfont = pygame.font.Font(None, 36)
 surface = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption('Hack The Classroom')
 clock = pygame.time.Clock()
@@ -31,95 +36,94 @@ class Player:
     def __init__(self, username, server_code):
         self.username = username
         self.server_code = server_code
-        self.client = Client(self.username, self.password)
-
+        self.client = Client(self.username, self.server_code)
         self.points = 0
 
-# TODO: from text inputs
-# player = Player('vesche', 'fewgf2j4j')
-# player.client.validate()
+
+# button for input
+button = pygame.Rect(600, 50, 50, 50)
+# text
+username_text = myfont.render('Username', False, (0, 0, 0))
+server_code_text = myfont.render('Server Code', False, (0, 0, 0))
+error_text = myfont.render('Error! Server code invalid.', False, (0, 0, 0))
 
 
-def main_background():
-    surface.fill(COLOR_BLACK)
+class InputBox():
+    def __init__(self, x, y):
+        self.font = pygame.font.Font(None, 36)
+        self.inputBox = pygame.Rect(x, y, 300, 36)
+        self.colourInactive = pygame.Color('gray')
+        self.colourActive = pygame.Color('blue')
+        self.colour = self.colourInactive
+        self.text = ''
+        self.active = False
 
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.active = self.inputBox.collidepoint(event.pos)
+            self.colour = self.colourActive if self.active else self.colourInactive
+        if event.type == pygame.KEYDOWN:
+            if self.active:
+                if event.key == pygame.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    self.text += event.unicode
 
-play_menu = pygameMenu.Menu(
-    surface,
-    bgfun=main_background,
-    color_selected=COLOR_WHITE,
-    font=pygameMenu.fonts.FONT_BEBAS,
-    font_color=COLOR_BLACK,
-    font_size=MENU_FONT_SIZE,
-    menu_alpha=MENU_ALPHA,
-    menu_color=MENU_BACKGROUND_COLOR,
-    menu_height=HEIGHT,
-    menu_width=WIDTH,
-    onclose=PYGAME_MENU_DISABLE_CLOSE,
-    option_shadow=False,
-    title='Play',
-    window_height=WINDOW_SIZE[1],
-    window_width=WINDOW_SIZE[0]
-)
-
-about_menu = pygameMenu.TextMenu(
-    surface,
-    bgfun=main_background,
-    color_selected=COLOR_WHITE,
-    font=pygameMenu.fonts.FONT_BEBAS,
-    font_color=COLOR_BLACK,
-    font_size_title=MENU_FONT_SIZE,
-    menu_color=MENU_BACKGROUND_COLOR,
-    menu_color_title=COLOR_WHITE,
-    menu_height=HEIGHT,
-    menu_width=WIDTH,
-    onclose=PYGAME_MENU_DISABLE_CLOSE,
-    option_shadow=False,
-    text_color=COLOR_BLACK,
-    title='About',
-    window_height=WINDOW_SIZE[1],
-    window_width=WINDOW_SIZE[0]
-)
-
-main_menu = pygameMenu.Menu(
-    surface,
-    bgfun=main_background,
-    color_selected=COLOR_WHITE,
-    font=pygameMenu.fonts.FONT_BEBAS,
-    font_color=COLOR_BLACK,
-    font_size=MENU_FONT_SIZE,
-    menu_alpha=100,
-    menu_color=MENU_BACKGROUND_COLOR,
-    menu_height=HEIGHT,
-    menu_width=WIDTH,
-    onclose=PYGAME_MENU_DISABLE_CLOSE,
-    option_shadow=False,
-    title='Hack The Classroom',
-    window_height=WINDOW_SIZE[1],
-    window_width=WINDOW_SIZE[0]
-)
-
-main_menu.add_option('Play', play_menu)
-main_menu.add_option('About', about_menu)
-main_menu.add_option('Quit', PYGAME_MENU_EXIT)
+    def draw(self, screen):
+        txtSurface = self.font.render(self.text, True, self.colour)
+        screen.blit(txtSurface, (self.inputBox.x+5, self.inputBox.y+5))
+        pygame.draw.rect(screen, self.colour, self.inputBox, 2)
 
 
 def main():
-    # HTC menu loop
+
+    validated, display_error = False, False
+    username = InputBox(250, 10)
+    server_code = InputBox(250, 100)
+
     while True:
         clock.tick(60)
 
         events = pygame.event.get()
         for event in events:
             if event.type == QUIT:
+                pygame.quit()
                 sys.exit(0)
+            
+            if event.type == MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                if button.collidepoint(mouse_pos):
+                    # validate player on login button press
+                    player = Player(username.text, server_code.text)
+                    results = player.client.validate()
+                    if results['success']:
+                        validated = True
+                    else:
+                        error = True
 
-        main_menu.mainloop(events)
+            username.handle_event(event)
+            server_code.handle_event(event)
+
+        surface.fill((233, 233, 233))
+        username.draw(surface)
+        server_code.draw(surface)
+        pygame.draw.rect(surface, [212, 0, 0], button)
+
+        surface.blit(username_text, (10, 10))
+        surface.blit(server_code_text, (10, 100))
+
+        # TODO: This doesn't work...?
+        if display_error:
+            surface.blit(error_text, (10, 150))
+
         pygame.display.flip()
 
-    # start game loop on successful break of menu loop
-    # while True:
-    #   do things
+        if validated:
+            break
+
+    # start game loop if validated
+    # do things with pygame & player object
+    print('things')
 
 
 if __name__ == '__main__':
