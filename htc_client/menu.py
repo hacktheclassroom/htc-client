@@ -60,6 +60,7 @@ def run_menu(surface, font, clock):
     # img
     bg = Background('./minigames/img/chalkboard.jpg', [0,0])
     logo = pygame.image.load('./minigames/img/logo.png')
+    logo.convert()
 
     while True:
         clock.tick(60)

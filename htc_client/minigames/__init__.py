@@ -2,5 +2,6 @@
 
 __all__ = [
     'Phishing',
-    'test'
+    'test',
+    'build_a_network'
 ]

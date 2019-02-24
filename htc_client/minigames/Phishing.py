@@ -47,6 +47,7 @@ def main(player, surface, font, clock):
                         return
                     else:
                         player.client.solve('Phishing', 'phishingftw')
+                        return
                 elif bad_button.collidepoint(mouse_pos):
                     if emails[email_number]['malicious']:
                         player.client.solve('Phishing', 'phishing ftw')

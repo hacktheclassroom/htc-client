@@ -3,12 +3,14 @@
 """htc_client.main"""
 
 import pygame
+import sys
 from pygame.locals import *
 
 from importlib import import_module
 
 from menu import run_menu
 from game import run_game
+from player import Player
 
 WIDTH = 1280
 HEIGHT = 720
@@ -24,7 +26,11 @@ font = pygame.font.Font('./font.ttf', 32)
 
 
 def main():
-    player = run_menu(surface, font, clock)
+    if len(sys.argv) == 3 and sys.argv[1] == "--debug":
+        username, server_code = sys.argv[2].split(":")
+        player = Player(username, server_code)
+    else:
+        player = run_menu(surface, font, clock)
 
     while True:
         minigame_name = run_game(player, surface, font, clock)
