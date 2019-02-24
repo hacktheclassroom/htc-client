@@ -1,4 +1,4 @@
-"""HTC client menu"""
+"""htc_client.menu"""
 
 import sys
 

@@ -1,4 +1,4 @@
-"""htc-client.player"""
+"""htc_client.player"""
 
 from htc_api import Client
 
@@ -10,4 +10,3 @@ class Player:
         self.username = username
         self.server_code = server_code
         self.client = Client(self.username, self.server_code)
-        self.points = 0
