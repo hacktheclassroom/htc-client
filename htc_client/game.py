@@ -9,17 +9,22 @@ from pygame.locals import *
 def run_game(surface, font, clock):
     """HTC primary game loop, returns a minigame."""
 
-    # later ls the minigames folder and get these names
-    i = 0
+    # TODO: Later look in the minigames folder and get these names
+    #       (this works for now...)
+    x, y = 0, 0
     minigames = {}
     mg_names = ['test']
-    
+
     for m in mg_names:
         minigames[m] = {
-            'rect': pygame.Rect(10, 10+i, 256, 256),
-            'color': [112, 0, 0]
+            'rect': pygame.Rect(10+x, 10+y, 246, 246), # 256-10 ;)
+            'color': [112, 0, 0],
+            'points': 100
         }
-        i += 100
+        x += 246
+        if x == 1230: # 246 * 5
+            y += 246
+            x = 0
 
     while True:
         clock.tick(60)

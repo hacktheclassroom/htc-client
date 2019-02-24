@@ -46,9 +46,10 @@ def run_menu(surface, font, clock):
     button = pygame.Rect(490, 440, 300, 50)
 
     # text boxes
+    title_text = font.render('Hack The Classroom', False, (0, 0, 0))
     username_text = font.render('Username', False, (0, 0, 0))
     server_code_text = font.render('Server Code', False, (0, 0, 0))
-    error_text = font.render('Error! Server code invalid.', False, (0, 0, 0))
+    error_text = font.render('Server code invalid.', False, (0, 0, 0))
     start_text = font.render('Start', False, (255, 255, 255))
 
     # input boxes
@@ -86,9 +87,10 @@ def run_menu(surface, font, clock):
         surface.blit(username_text, (490, 200))
         surface.blit(server_code_text, (490, 320))
         surface.blit(start_text, (600, 445))
+        surface.blit(title_text, (490, 100))
 
         # TODO: This doesn't work...?
         if display_error:
-            surface.blit(error_text, (10, 150))
+            surface.blit(error_text, (500, 520))
 
         pygame.display.flip()
