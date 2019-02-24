@@ -100,7 +100,6 @@ def run_menu(surface, font, clock):
 
         surface.blit(logo, (50, 50))
 
-        # TODO: This doesn't work...?
         if display_error:
             surface.blit(error_text, (500, 520))
 
