@@ -70,6 +70,7 @@ def run_menu(surface, font, clock):
                 if button.collidepoint(mouse_pos):
                     # validate player on login button press
                     player = Player(username.text, server_code.text)
+                    player.client.solve('foo', 'bar') # will create user if they don't exist
                     results = player.client.validate()
                     if results['success']:
                         return player

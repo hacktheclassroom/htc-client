@@ -27,7 +27,7 @@ def main(player, surface, font, clock):
             if event.type == MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
                 if button.collidepoint(mouse_pos):
-                    flag = 'thisisatest'
+                    flag = 'testflag'
                     player.client.solve(NAME, flag)
                     return
 

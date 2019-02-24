@@ -1,2 +1,4 @@
 *.pyc
 stage/
+build/
+main.build/
