@@ -1,3 +1,4 @@
+"""htc_client.game"""
 
 import sys
 
@@ -8,12 +9,17 @@ from pygame.locals import *
 def run_game(surface, font, clock):
     """HTC primary game loop, returns a minigame."""
 
-    minigames = {
-        'test': {
-            'rect': pygame.Rect(100, 100, 100, 100),
+    # later ls the minigames folder and get these names
+    i = 0
+    minigames = {}
+    mg_names = ['test']
+    
+    for m in mg_names:
+        minigames[m] = {
+            'rect': pygame.Rect(10, 10+i, 256, 256),
             'color': [112, 0, 0]
         }
-    }
+        i += 100
 
     while True:
         clock.tick(60)
@@ -27,7 +33,7 @@ def run_game(surface, font, clock):
             if event.type == MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
 
-                for k, v in minigames:
+                for k, v in minigames.items():
                     if v['rect'].collidepoint(mouse_pos):
                         return k
 
