@@ -49,7 +49,7 @@ def run_menu(surface, font, clock):
     title_text = font.render('Hack The Classroom', False, (0, 0, 0))
     username_text = font.render('Username', False, (0, 0, 0))
     server_code_text = font.render('Server Code', False, (0, 0, 0))
-    error_text = font.render('Server code invalid.', False, (0, 0, 0))
+    error_text = font.render('Server code invalid!', False, (0, 0, 0))
     start_text = font.render('Start', False, (255, 255, 255))
 
     # input boxes

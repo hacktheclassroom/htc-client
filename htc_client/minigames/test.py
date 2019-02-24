@@ -6,7 +6,7 @@ import pygame
 from pygame.locals import *
 
 
-def main(surface, font, clock):
+def main(player, surface, font, clock):
     """test minigame"""
 
     foo = font.render('Test minigame', False, (0, 0, 0))
