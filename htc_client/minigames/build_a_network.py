@@ -5,10 +5,11 @@ import sys
 import pygame
 from pygame.locals import *
 from main import WIDTH, HEIGHT
-from build_a_network.parser import BlockParser
+from build_a_network.util import BlockParser, Puzzle
 sys.path.append('..')
 from common import Background
 from build_a_network.entity import BasicBlock, DraggableBlock, SelectableAndDraggableBlock, ClickableBlock
+
 import random
 
 
@@ -16,13 +17,29 @@ NAME = 'Network Builder'
 POINTS = 300
 IMG = './minigames/img/phishing.png'
 
-emails = [
-    {
-        'img': './minigames/img/email1.png',
-        'malicious': False
+PUZZLES = {
+    "puzzle1": {
+        "snd_blocks": ["firewall", "router"],
+        "draggable_blocks": ["database", "webserver"]
     }
+}
 
-]
+
+class RunTracker(object):
+    def __init__(self, parser):
+        self.done = False
+        self.parser = parser
+        self.result = None
+
+    def finish(self):
+        self.done = True
+        self.result = self.parser.parse()
+
+    def get_result(self):
+        if self.result:
+            return self.result
+        else:
+            return []
 
 
 def main(player, surface, font, clock):
@@ -36,10 +53,14 @@ def main(player, surface, font, clock):
     #
     # email_number = 0
 
+    # Pick a random puzzle TODO
+    puzzle = PUZZLES["puzzle1"]
+    blockgroups = Puzzle(**puzzle).make_blockgroups()
+
     basic_blocks = pygame.sprite.Group()
-    draggable_blocks = pygame.sprite.Group()
-    snd_blocks = pygame.sprite.Group()
     clickable_blocks = pygame.sprite.Group()
+    draggable_blocks = blockgroups["draggable_blockgroup"]
+    snd_blocks = blockgroups["snd_blockgroup"]
 
     all_blocks = [
         basic_blocks,
@@ -59,23 +80,17 @@ def main(player, surface, font, clock):
     basic_blocks.add(internet)
 
     parser = BlockParser(all_blocks)
+    tracker = RunTracker(parser)
 
-    clickable_blocks.add(ClickableBlock(250, 250, 80, 40, "check_block", lambda: parser.parse()))
+    clickable_blocks.add(ClickableBlock(250, 250, 80, 40, "check_block", tracker.finish))
 
-    for x in range(0, 2):
-        for y in range(0, 2):
-            block = DraggableBlock(x * 100 + 20, y * 100 + 20, "draggable{}{}".format(x,y))
-            draggable_blocks.add(block)
-
-    for x in range(0, 2):
-        for y in range(2, 4):
-            block = SelectableAndDraggableBlock(x * 100 + 20, y * 100 + 20, "snd{}{}".format(x,y))
-            snd_blocks.add(block)
-            draggable_blocks.add(block)
-
-    while True:
+    while not tracker.done:
         clock.tick(60)
         surface.fill([0, 0, 255])
+
+        if draw_line and selected:
+            pygame.draw.line(surface, (0, 0, 0), (selected.rect.x + selected.rect.width/2, selected.rect.y + selected.rect.height/2),
+                             pygame.mouse.get_pos(), 4)
 
         for block in snd_blocks:
             block.draw_line(surface)
@@ -120,43 +135,8 @@ def main(player, surface, font, clock):
                     picked_up.rect.x = mouse_x - picked_up.rect.width/2
                     picked_up.rect.y = mouse_y - picked_up.rect.height/2
 
-        if draw_line and selected:
-            pygame.draw.line(surface, (0, 0, 0), (selected.rect.x + selected.rect.width/2, selected.rect.y + selected.rect.height/2),
-                             pygame.mouse.get_pos(), 4)
-
         pygame.display.flip()
 
-
-
-        #
-        # for event in events:
-        #     if event.type == pygame.QUIT:
-        #         running = False
-        #
-        #     elif event.type == pygame.MOUSEBUTTONDOWN:
-        #         if event.button == 1:
-        #             if rectangle.collidepoint(event.pos):
-        #                 rectangle_draging = True
-        #                 mouse_x, mouse_y = event.pos
-        #                 offset_x = rectangle.x - mouse_x
-        #                 offset_y = rectangle.y - mouse_y
-        #
-        #     elif event.type == pygame.MOUSEBUTTONUP:
-        #         if event.button == 1:
-        #             rectangle_draging = False
-        #
-        #     elif event.type == pygame.MOUSEMOTION:
-        #         if rectangle_draging:
-        #             mouse_x, mouse_y = event.pos
-        #             rectangle.x = mouse_x + offset_x
-        #             rectangle.y = mouse_y + offset_y
-        #
-        # surface.fill([255, 255, 255])
-        # surface.blit(bg.image, bg.rect)
-        # surface.blit(title, (10, 10))
-        #
-        # email_img = pygame.image.load(emails[email_number]['img'])
-        # surface.blit(email_img, (50, 50))
-        #
-        # pygame.draw.rect(surface, [0, 212, 0], good_button)
-        # pygame.draw.rect(surface, [212, 0, 0], bad_button)
+    result = tracker.get_result()
+    t = 2
+    return
