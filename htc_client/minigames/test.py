@@ -7,6 +7,7 @@ from pygame.locals import *
 
 NAME = 'test'
 POINTS = 100
+IMG = './minigames/img/test.png'
 
 
 def main(player, surface, font, clock):

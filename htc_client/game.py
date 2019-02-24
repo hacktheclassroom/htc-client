@@ -6,12 +6,14 @@ import importlib
 import pygame
 from pygame.locals import *
 
+from common import Background
+
 
 def run_game(player, surface, font, clock):
     """HTC primary game loop, returns a minigame."""
 
     # build a minigame list of Rects
-    x, y = 0, 120
+    x, y = 50, 120
     minigames = {}
     mg = importlib.import_module('minigames')
     mg_names = mg.__all__
@@ -24,8 +26,9 @@ def run_game(player, surface, font, clock):
             'x': m_x,
             'y': m_y,
             'rect': pygame.Rect(m_x, m_y, 246, 200), # 256-10 ;)
-            'text': font.render('{} - {}'.format(m, points), False, (0, 0, 0)),
-            'color': [69, 137, 255]
+            'text': font.render('{} - {}'.format(m, points), False, (255, 255, 255)),
+            'color': [90, 69, 0],
+            'img': pygame.image.load(mod.IMG)
         }
         x += 252
         if x > 1200:
@@ -34,10 +37,12 @@ def run_game(player, surface, font, clock):
 
     # get and load score
     score = player.client.score()['score']
-    score_text = font.render('Score: {}'.format(str(score)), False, (0, 0, 0))
+    score_text = font.render('Score: {}'.format(str(score)), False, (255, 255, 255))
 
     # title
-    title_text = font.render('Choose A Minigame', False, (0, 0, 0))
+    title_text = font.render('Choose A Minigame', False, (255, 255, 255))
+
+    bg = Background('./minigames/img/chalkboard.jpg', [0, 0])
 
     while True:
         clock.tick(60)
@@ -55,12 +60,14 @@ def run_game(player, surface, font, clock):
                     if v['rect'].collidepoint(mouse_pos):
                         return k
 
-        surface.fill((233, 233, 233))
-        surface.blit(score_text, (10, 10))
-        surface.blit(title_text, (490, 10))
+        surface.fill([255, 255, 255])
+        surface.blit(bg.image, bg.rect)
+        surface.blit(score_text, (50, 50))
+        surface.blit(title_text, (490, 50))
 
         for _, v in minigames.items():
             pygame.draw.rect(surface, v['color'], v['rect'])
-            surface.blit(v['text'], (v['x'], v['y']))
+            surface.blit(v['text'], (v['x']+10, v['y']))
+            surface.blit(v['img'], (v['x']+60, v['y']+45))
 
         pygame.display.flip()
