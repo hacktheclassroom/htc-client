@@ -1,67 +1,29 @@
-"""htc-client"""
+"""HTC client menu"""
 
 import sys
 
-from htc_api import Client
-
-# all the pygame imports
 import pygame
-import pygameMenu
 from pygame.locals import *
-from pygameMenu.locals import *
 
-# globals
-COLOR_BLACK = (0, 0, 0)
-COLOR_WHITE = (255, 255, 255)
-MENU_BACKGROUND_COLOR = (58, 58, 58)
-WIDTH = 1280
-HEIGHT = 720
-WINDOW_SIZE = (WIDTH, HEIGHT)
-MENU_FONT_SIZE = 36
-MENU_ALPHA = 100
-
-# init pygame
-pygame.init()
-pygame.font.init()
-
-# TODO: Fix font
-# myfont = pygame.font.Font('./font.ttf', 36)
-myfont = pygame.font.Font(None, 36)
-surface = pygame.display.set_mode(WINDOW_SIZE)
-pygame.display.set_caption('Hack The Classroom')
-clock = pygame.time.Clock()
-
-
-class Player:
-    def __init__(self, username, server_code):
-        self.username = username
-        self.server_code = server_code
-        self.client = Client(self.username, self.server_code)
-        self.points = 0
-
-
-# button for input
-button = pygame.Rect(600, 50, 50, 50)
-# text
-username_text = myfont.render('Username', False, (0, 0, 0))
-server_code_text = myfont.render('Server Code', False, (0, 0, 0))
-error_text = myfont.render('Error! Server code invalid.', False, (0, 0, 0))
+from player import Player
 
 
 class InputBox():
+    """Pygame text input hack."""
+
     def __init__(self, x, y):
         self.font = pygame.font.Font(None, 36)
         self.inputBox = pygame.Rect(x, y, 300, 36)
-        self.colourInactive = pygame.Color('gray')
-        self.colourActive = pygame.Color('blue')
-        self.colour = self.colourInactive
+        self.colorInactive = pygame.Color('gray')
+        self.colorActive = pygame.Color('blue')
+        self.color = self.colorInactive
         self.text = ''
         self.active = False
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.active = self.inputBox.collidepoint(event.pos)
-            self.colour = self.colourActive if self.active else self.colourInactive
+            self.color = self.colorActive if self.active else self.colorInactive
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_BACKSPACE:
@@ -70,14 +32,25 @@ class InputBox():
                     self.text += event.unicode
 
     def draw(self, screen):
-        txtSurface = self.font.render(self.text, True, self.colour)
+        txtSurface = self.font.render(self.text, True, self.color)
         screen.blit(txtSurface, (self.inputBox.x+5, self.inputBox.y+5))
-        pygame.draw.rect(screen, self.colour, self.inputBox, 2)
+        pygame.draw.rect(screen, self.color, self.inputBox, 2)
 
 
-def main():
+def run_menu(surface, font, clock):
+    """HTC pygame menu, validates and returns a valid player object."""
 
     validated, display_error = False, False
+
+    # button for running validation
+    button = pygame.Rect(600, 50, 50, 50)
+
+    # text boxes
+    username_text = font.render('Username', False, (0, 0, 0))
+    server_code_text = font.render('Server Code', False, (0, 0, 0))
+    error_text = font.render('Error! Server code invalid.', False, (0, 0, 0))
+
+    # input boxes
     username = InputBox(250, 10)
     server_code = InputBox(250, 100)
 
@@ -121,10 +94,4 @@ def main():
         if validated:
             break
 
-    # start game loop if validated
-    # do things with pygame & player object
-    print('things')
-
-
-if __name__ == '__main__':
-    main()
+    return player
