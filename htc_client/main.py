@@ -28,7 +28,7 @@ font = pygame.font.Font('./font.ttf', 32)
 def main():
     if len(sys.argv) == 3 and sys.argv[1] == "--debug":
         username, server_code = sys.argv[2].split(":")
-        player = Player(username, server_code)
+        player = Player(username, server_code)#, url="http://localhost", port=51337)
     else:
         player = run_menu(surface, font, clock)
 

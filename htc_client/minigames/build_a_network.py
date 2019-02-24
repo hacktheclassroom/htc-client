@@ -143,6 +143,7 @@ def main(player, surface, font, clock):
 
         pygame.display.flip()
 
-    result = tracker.get_result()
-    t = 2
+    flags = tracker.get_result()
+    for flag in flags:
+        player.client.solve('bnetwork', flag)
     return

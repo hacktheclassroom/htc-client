@@ -41,7 +41,7 @@ def run_game(player, surface, font, clock):
     score_text = font.render('Score: {}'.format(str(score)), False, (255, 255, 255))
 
     # title
-    title_text = font.render('Choose A Minigame', False, (255, 255, 255))
+    title_text = font.render('Choose A Minigame!', False, (255, 255, 255))
 
     bg = Background('./minigames/img/chalkboard.jpg', [0, 0])
 
