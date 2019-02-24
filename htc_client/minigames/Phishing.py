@@ -1,4 +1,4 @@
-"""htc_client.minigames.test"""
+"""htc_client.minigames.Phishing"""
 
 import sys
 

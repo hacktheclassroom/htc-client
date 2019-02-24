@@ -10,7 +10,6 @@ from importlib import import_module
 from menu import run_menu
 from game import run_game
 
-
 WIDTH = 1280
 HEIGHT = 720
 WINDOW_SIZE = (WIDTH, HEIGHT)
@@ -22,6 +21,7 @@ surface = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption('Hack The Classroom')
 clock = pygame.time.Clock()
 font = pygame.font.Font('./font.ttf', 32)
+
 
 def main():
     player = run_menu(surface, font, clock)
