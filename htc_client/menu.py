@@ -11,10 +11,10 @@ from player import Player
 class InputBox():
     """Pygame text input hack."""
 
-    def __init__(self, x, y):
-        self.font = pygame.font.Font(None, 36)
-        self.inputBox = pygame.Rect(x, y, 300, 36)
-        self.colorInactive = pygame.Color('gray')
+    def __init__(self, x, y, font=None):
+        self.font = font if font else pygame.font.Font(None, 50)
+        self.inputBox = pygame.Rect(x, y, 300, 50)
+        self.colorInactive = pygame.Color('black')
         self.colorActive = pygame.Color('blue')
         self.color = self.colorInactive
         self.text = ''
@@ -43,16 +43,17 @@ def run_menu(surface, font, clock):
     validated, display_error = False, False
 
     # button for running validation
-    button = pygame.Rect(600, 50, 50, 50)
+    button = pygame.Rect(490, 440, 300, 50)
 
     # text boxes
     username_text = font.render('Username', False, (0, 0, 0))
     server_code_text = font.render('Server Code', False, (0, 0, 0))
     error_text = font.render('Error! Server code invalid.', False, (0, 0, 0))
+    start_text = font.render('Start', False, (255, 255, 255))
 
     # input boxes
-    username = InputBox(250, 10)
-    server_code = InputBox(250, 100)
+    username = InputBox(490, 250, font=font)
+    server_code = InputBox(490, 370, font=font)
 
     while True:
         clock.tick(60)
@@ -71,18 +72,20 @@ def run_menu(surface, font, clock):
                     results = player.client.validate()
                     if results['success']:
                         return player
-                    error = True
+                    display_error = True
 
             username.handle_event(event)
             server_code.handle_event(event)
 
-        surface.fill((233, 233, 233))
+        surface.fill((222, 222, 222))
         username.draw(surface)
         server_code.draw(surface)
         pygame.draw.rect(surface, [212, 0, 0], button)
 
-        surface.blit(username_text, (10, 10))
-        surface.blit(server_code_text, (10, 100))
+        # 1280/2 - 150 = 490
+        surface.blit(username_text, (490, 200))
+        surface.blit(server_code_text, (490, 320))
+        surface.blit(start_text, (600, 445))
 
         # TODO: This doesn't work...?
         if display_error:

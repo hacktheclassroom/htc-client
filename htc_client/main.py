@@ -23,8 +23,8 @@ pygame.display.set_caption('Hack The Classroom')
 clock = pygame.time.Clock()
 
 # TODO: Fix font
-# myfont = pygame.font.Font('./font.ttf', 36)
-font = pygame.font.Font(None, 36)
+font = pygame.font.Font('./font.ttf', 32)
+# font = pygame.font.SysFont('Arial', 36)
 
 
 def main():
