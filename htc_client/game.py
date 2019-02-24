@@ -1,6 +1,7 @@
 """htc_client.game"""
 
 import sys
+import importlib
 
 import pygame
 from pygame.locals import *
@@ -10,25 +11,25 @@ def run_game(player, surface, font, clock):
     """HTC primary game loop, returns a minigame."""
 
     # build a minigame list of Rects
-    # TODO: Later look in the minigames folder and get these names
-    #       (this works for now...)
     x, y = 0, 120
     minigames = {}
-    mg_names = ['test']
+    mg = importlib.import_module('minigames')
+    mg_names = mg.__all__
 
     for m in mg_names:
+        mod = importlib.import_module('minigames.{}'.format(m))
+        points = mod.POINTS
         m_x, m_y = 10+x, 10+y
         minigames[m] = {
             'x': m_x,
             'y': m_y,
             'rect': pygame.Rect(m_x, m_y, 246, 200), # 256-10 ;)
-            'text': font.render(m, False, (0, 0, 0)),
-            'color': [69, 137, 255],
-            'points': 100 # TODO: Get this from test.py
+            'text': font.render('{} - {}'.format(m, points), False, (0, 0, 0)),
+            'color': [69, 137, 255]
         }
-        x += 246
-        if x == 1230: # 246 * 5
-            y += 246
+        x += 252
+        if x > 1200:
+            y += 256
             x = 0
 
     # get and load score

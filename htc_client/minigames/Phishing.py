@@ -5,14 +5,13 @@ import sys
 import pygame
 from pygame.locals import *
 
-NAME = 'test'
-POINTS = 100
+NAME = 'Phishing'
+POINTS = 300
 
 
 def main(player, surface, font, clock):
-    """test minigame"""
 
-    foo = font.render('Test minigame', False, (0, 0, 0))
+    foo = font.render('Phishing minigame', False, (0, 0, 0))
     button = pygame.Rect(100, 100, 100, 100)
 
     while True:
