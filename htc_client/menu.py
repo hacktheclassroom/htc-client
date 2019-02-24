@@ -70,9 +70,8 @@ def run_menu(surface, font, clock):
                     player = Player(username.text, server_code.text)
                     results = player.client.validate()
                     if results['success']:
-                        validated = True
-                    else:
-                        error = True
+                        return player
+                    error = True
 
             username.handle_event(event)
             server_code.handle_event(event)
@@ -90,8 +89,3 @@ def run_menu(surface, font, clock):
             surface.blit(error_text, (10, 150))
 
         pygame.display.flip()
-
-        if validated:
-            break
-
-    return player

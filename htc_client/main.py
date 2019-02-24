@@ -2,10 +2,12 @@
 
 """htc_client.main"""
 
-from menu import run_menu
-
 import pygame
 from pygame.locals import *
+
+from menu import run_menu
+from game import run_game
+
 
 WIDTH = 1280
 HEIGHT = 720
@@ -25,8 +27,12 @@ font = pygame.font.Font(None, 36)
 
 def main():
     player = run_menu(surface, font, clock)
-    # run game here
 
+    while True:
+        minigame = run_game(surface, font, clock)
+        print(minigame)
+        # some importlib magichere :)
+        # minigame(surface, font, clock)
 
 if __name__ == '__main__':
     main()
